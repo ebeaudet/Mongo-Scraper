@@ -46,6 +46,21 @@ app.get("/", function (req, res) {
       res.json(err);
 
     });
+
+
+//     Comment.find({}) 
+//     .then(function (Comment) {
+
+//       var commentObject = {
+//         comment: Comment
+//       }
+//       res.render("index", commentObject);
+//     })
+//     .catch(function (err) {
+//       res.json(err);
+    
+
+// });
 });
 app.get("/scrape", function (req, res) {
   //   res.render("scrape", { layout: "main" });
@@ -99,9 +114,14 @@ app.get("/articles", function (req, res) {
 
 
 app.post("/articles/:id", function (req, res) {
-  Comment.create(req.body)
-    .then(function (comment) {
+  Comment.findOneAndUpdate(req.body,req.body,{new:true})
+    .then(function (dbComment) {
 
+      return Article.findOneAndUpdate({_id:req.params.id},  {$push: { comment: dbComment._id } }, { new: false })
+
+    })
+    .then(function(dbArticle) {
+      res.json(dbArticle);
     })
     .catch(function (err) {
       res.json(err);

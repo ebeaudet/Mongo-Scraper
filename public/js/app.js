@@ -18,25 +18,34 @@ $(document).on("click", "#commentButton", function () {
 
 });
 
+var commentSent = false;
 // When you click the savecomment button
 $(document).on("click", "#saveButton", function () {
     console.log("Comment: "+articleId);
        // Run a POST request to change the note, using what's entered in the inputs
-    $.ajax({
-        method: "POST",
-        url: "/articles/" + articleId,
-        data: {
-            comment: $("#comment").val()
-        }
-    })
-        // With that done
-        .then(function (data) {
-            // Log the response
-            console.log(data);
-            // Empty the notes section
-            $("#comment").empty();
-        });
-
-  $("#commentModal").hide();
+    
+       if (!commentSent){
+           commentSent = true;
+        $.ajax({
+            method: "POST",
+            url: "/articles/" + articleId,
+            data: {
+                comment: $("#comment").val()
+            }
+        })
+            // With that done
+            .then(function (data) {
+                // Log the response
+                console.log(data);
+                // Empty the notes section
+                $("#comment").empty();
+            });
+    
+      $("#commentModal").hide();
+       }
+       else{
+        commentSent =false;
+       }
+   
     
 });
